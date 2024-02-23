@@ -18,12 +18,14 @@ class _PickImageState extends State<PickImage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 180, 152, 232),
-      body: Center(
+      body: Container(
+        alignment: Alignment.topCenter,
+        padding: EdgeInsets.only(top: 100.0 ),
         child: Stack(
           children: [
             _image != null
                 ? CircleAvatar(
-                    radius: 100, backgroundImage: MemoryImage(_image!))
+                    radius: 50, backgroundImage: MemoryImage(_image!))
                 : const CircleAvatar(
                     radius: 100,
                     backgroundImage: NetworkImage(
