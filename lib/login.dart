@@ -76,7 +76,7 @@ class _PickImageState extends State<PickImage> {
                   Expanded(
                     child: InkWell(
                       onTap: () {
-                       
+                        _pickImageFromCamera();
                       },
                       child: const SizedBox(
                         child: Column(
@@ -108,5 +108,16 @@ class _PickImageState extends State<PickImage> {
       _image = File(returnImage.path).readAsBytesSync();
     });
     Navigator.of(context).pop(); //cierra el modal
+  }
+
+  Future _pickImageFromCamera() async {
+    final returnImage =
+        await ImagePicker().pickImage(source: ImageSource.camera);
+    if (returnImage == null) return;
+    setState(() {
+      selectedIMage = File(returnImage.path);
+      _image = File(returnImage.path).readAsBytesSync();
+    });
+    Navigator.of(context).pop();
   }
 }
