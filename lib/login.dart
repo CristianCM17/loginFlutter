@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:login/widgets/CustomTextField.dart';
 
 class PickImage extends StatefulWidget {
   const PickImage({super.key});
@@ -14,32 +15,65 @@ class PickImage extends StatefulWidget {
 class _PickImageState extends State<PickImage> {
   Uint8List? _image;
   File? selectedIMage;
+
+
+  final nombreController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 180, 152, 232),
+      appBar: AppBar(
+        title: const Text("Registro de Usuario"),
+        backgroundColor: Colors.green,
+        centerTitle: true,
+      ),
       body: Container(
-        alignment: Alignment.topCenter,
-        padding: EdgeInsets.only(top: 100.0 ),
-        child: Stack(
-          children: [
-            _image != null
-                ? CircleAvatar(
-                    radius: 50, backgroundImage: MemoryImage(_image!))
-                : const CircleAvatar(
-                    radius: 100,
-                    backgroundImage: NetworkImage(
-                        "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"),
-                  ),
-            Positioned(
-                bottom: -0,
-                left: 140,
-                child: IconButton(
-                    onPressed: () {
-                      showImagePickerOption(context);
-                    },
-                    icon: const Icon(Icons.add_a_photo)))
-          ],
+        margin: const EdgeInsets.only(top: 20.0),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              //ImagePicker
+              _image != null
+                  ? CircleAvatar(
+                      radius: 100, backgroundImage: MemoryImage(_image!))
+                  : const CircleAvatar(
+                      radius: 100,
+                      backgroundImage:AssetImage(
+                          "assets/user.jpg"),
+                    ),
+              Container(    
+                  child: IconButton(
+                      onPressed: () {
+                        showImagePickerOption(context);
+                      },
+                      icon: const Icon(Icons.add_a_photo))),
+              CustomTextField(
+                controller: emailController,
+                name: "Email",
+                prefixIcon: Icons.email_outlined,
+                inputType: TextInputType.emailAddress,
+              ),
+              CustomTextField(
+                controller: passwordController,
+                name: "Contraseña",
+                prefixIcon: Icons.lock_outline,
+                inputType: TextInputType.text,
+                obscureText: true,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Lógica para manejar el evento del botón de registro
+                },
+                child: const Text(
+                  'Registrar',
+                  selectionColor: Colors.deepPurple,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
