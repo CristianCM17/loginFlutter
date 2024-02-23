@@ -16,11 +16,20 @@ class _PickImageState extends State<PickImage> {
   Uint8List? _image;
   File? selectedIMage;
 
-
-  final nombreController = TextEditingController();
+  
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  
+
+   final _formKey = GlobalKey<FormState>(); 
+
+
+    @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,46 +42,67 @@ class _PickImageState extends State<PickImage> {
         margin: const EdgeInsets.only(top: 20.0),
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              //ImagePicker
-              _image != null
-                  ? CircleAvatar(
-                      radius: 100, backgroundImage: MemoryImage(_image!))
-                  : const CircleAvatar(
-                      radius: 100,
-                      backgroundImage:AssetImage(
-                          "assets/user.jpg"),
-                    ),
-              Container(    
-                  child: IconButton(
-                      onPressed: () {
-                        showImagePickerOption(context);
-                      },
-                      icon: const Icon(Icons.add_a_photo))),
-              CustomTextField(
-                controller: emailController,
-                name: "Email",
-                prefixIcon: Icons.email_outlined,
-                inputType: TextInputType.emailAddress,
-              ),
-              CustomTextField(
-                controller: passwordController,
-                name: "Contraseña",
-                prefixIcon: Icons.lock_outline,
-                inputType: TextInputType.text,
-                obscureText: true,
-              ),
-              ElevatedButton(
-                onPressed: () {
-                  // Lógica para manejar el evento del botón de registro
-                },
-                child: const Text(
-                  'Registrar',
-                  selectionColor: Colors.deepPurple,
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                InkWell(
+                  borderRadius: BorderRadius.circular(100),
+                  onTap: () {
+                     showImagePickerOption(context);
+                  },
+                  child: _image != null
+                      ? CircleAvatar(
+                          radius: 100,
+                          backgroundImage: MemoryImage(_image!),
+                        )
+                      : const CircleAvatar(
+                          radius: 100,
+                          backgroundImage: AssetImage("assets/user.jpg"),
+                        ),
                 ),
-              ),
-            ],
+                 SizedBox(height: 20,),
+                CustomTextField(
+                  controller: emailController,
+                  name: "Email",
+                  prefixIcon: Icons.email_outlined,
+                  inputType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, introduce tu email';
+                    } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
+                        .hasMatch(value)) {
+                      return 'Por favor, introduce un email válido';
+                    }
+                    return null;
+                  },
+                ),
+                CustomTextField(
+                  controller: passwordController,
+                  name: "Contraseña",
+                  prefixIcon: Icons.lock_outline,
+                  inputType: TextInputType.text,
+                  obscureText: true,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Por favor, introduce tu contraseña';
+                    }
+                    return null;
+                  },
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                   if (_formKey.currentState!.validate()) {
+                    
+                   }
+                  },
+                  child: const Text(
+                    'Validar',
+                    selectionColor: Colors.deepPurple,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
