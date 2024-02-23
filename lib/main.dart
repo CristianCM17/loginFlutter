@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
   
       ),
-      home: const Login(),
+      home: const PickImage(),
     );
   }
 }
