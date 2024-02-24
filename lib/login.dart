@@ -16,11 +16,13 @@ class _PickImageState extends State<PickImage> {
   Uint8List? _image;
   File? selectedIMage;
 
-  
+  final nameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
    final _formKey = GlobalKey<FormState>(); 
+  
+   String datosValidados = "";
 
 
     @override
@@ -34,9 +36,10 @@ class _PickImageState extends State<PickImage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Registro de Usuario"),
-        backgroundColor: Colors.green,
+        title: const Text("Añadir usuario"),
+        backgroundColor: Colors.purple[300],
         centerTitle: true,
+        titleTextStyle: TextStyle(color: Colors.black,fontSize: 25,fontWeight: FontWeight.bold),
       ),
       body: Container(
         margin: const EdgeInsets.only(top: 20.0),
@@ -63,16 +66,28 @@ class _PickImageState extends State<PickImage> {
                 ),
                  SizedBox(height: 20,),
                 CustomTextField(
+                  controller: nameController,
+                  name: "Nombre",
+                  prefixIcon: Icons.email_outlined,
+                  inputType: TextInputType.emailAddress,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Introduce el nombre';
+                    }
+                    return null;
+                  },
+                ),
+                CustomTextField(
                   controller: emailController,
                   name: "Email",
                   prefixIcon: Icons.email_outlined,
                   inputType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, introduce tu email';
+                      return 'Introduce tu email';
                     } else if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$')
                         .hasMatch(value)) {
-                      return 'Por favor, introduce un email válido';
+                      return 'Introduce un email válido';
                     }
                     return null;
                   },
@@ -85,7 +100,7 @@ class _PickImageState extends State<PickImage> {
                   obscureText: true,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Por favor, introduce tu contraseña';
+                      return 'Introduce tu contraseña';
                     }
                     return null;
                   },
@@ -93,7 +108,9 @@ class _PickImageState extends State<PickImage> {
                 ElevatedButton(
                   onPressed: () {
                    if (_formKey.currentState!.validate()) {
-                    
+                    setState(() {
+                      datosValidados = "Todos los datos son correctos";
+                    });
                    }
                   },
                   child: const Text(
@@ -101,6 +118,11 @@ class _PickImageState extends State<PickImage> {
                     selectionColor: Colors.deepPurple,
                   ),
                 ),
+                SizedBox(height: 30,),
+                Text(datosValidados,style: TextStyle(
+                  color: Colors.green,
+                  fontWeight: FontWeight.w600
+                ),)
               ],
             ),
           ),
